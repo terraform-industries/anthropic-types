@@ -99,6 +99,17 @@ impl ToolChoice {
 }
 
 /// Helper function to create a simple calculator tool definition
+/// Evaluates a mathematical expression
+pub fn evaluate_expression(expression: &str) -> Result<f64, String> {
+    // This is a very simple evaluator that handles basic operations
+    // In a real implementation, you'd use a proper expression parser
+    // For now, we'll just check if it's a simple number
+    expression.parse::<f64>().map_err(|_| {
+        format!("Failed to evaluate expression: '{}'. Only simple numeric values are supported in this implementation.", expression)
+    })
+}
+
+/// Helper function to create a simple calculator tool definition
 pub fn calculator_tool() -> ToolDefinition {
     ToolDefinition {
         name: "calculator".to_string(),
