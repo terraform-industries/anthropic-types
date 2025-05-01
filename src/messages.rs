@@ -131,10 +131,6 @@ pub enum OperationType {
     /// List available models
     #[serde(rename = "ListModels")]
     ListModels,
-
-    /// Execute a tool
-    #[serde(rename = "ExecuteTool")]
-    ExecuteTool,
 }
 
 /// Request format for the anthropic-proxy actor
