@@ -1,0 +1,18 @@
+// Anthropic API Types Library
+//
+// This crate provides type definitions for interacting with the Anthropic API
+// and is intended to be used by Theater actors that need to communicate with Claude.
+
+pub mod messages;
+pub mod models;
+pub mod tools;
+pub mod errors;
+
+// Re-export main types for convenience
+pub use messages::{
+    AnthropicRequest, AnthropicResponse, CompletionRequest, CompletionResponse,
+    Message, MessageContent, OperationType, ResponseStatus, Usage,
+};
+pub use models::{ModelInfo, ModelPricing};
+pub use tools::{ToolDefinition, ToolChoice, ToolParameters};
+pub use errors::AnthropicError;
