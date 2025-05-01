@@ -87,13 +87,17 @@ pub struct Usage {
 
     /// Number of output tokens
     pub output_tokens: u32,
+
+    pub cache_read_input_tokens: Option<u32>,
+
+    pub cache_creation_input_tokens: Option<u32>,
 }
 
 /// Response from a completion request
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionResponse {
     /// Generated content blocks
-    pub content_blocks: Vec<MessageContent>,
+    pub content: Vec<MessageContent>,
 
     /// ID of the message
     pub id: String,
@@ -101,21 +105,42 @@ pub struct CompletionResponse {
     /// Model used for generation
     pub model: String,
 
+    // always "assistant"
+    pub role: String,
+
     /// Reason why generation stopped
-    pub stop_reason: String,
+    /// can be "end_turn", "max_tokens", "stop_sequence", "tool_use", null
+    pub stop_reason: Option<StopReason>,
 
     /// Stop sequence if applicable (deprecated - kept for backward compatibility)
     pub stop_sequence: Option<String>,
 
-    /// Type of message (deprecated - kept for backward compatibility)
+    /// Message type
+    #[serde(rename = "type")]
     pub message_type: Option<String>,
 
     /// Token usage information
     pub usage: Usage,
+}
 
-    /// Original content string for backward compatibility
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content: Option<String>,
+/// Reason why generation stopped
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum StopReason {
+    /// Generation stopped because the end of a turn was reached
+    #[serde(rename = "end_turn")]
+    EndTurn,
+
+    /// Generation stopped because the maximum token limit was reached
+    #[serde(rename = "max_tokens")]
+    MaxTokens,
+
+    /// Generation stopped because a stop sequence was encountered
+    #[serde(rename = "stop_sequence")]
+    StopSequence,
+
+    /// Generation stopped because a tool was used
+    #[serde(rename = "tool_use")]
+    ToolUse,
 }
 
 /// Operation types that this actor can handle
