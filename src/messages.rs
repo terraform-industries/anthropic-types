@@ -63,9 +63,6 @@ pub struct CompletionRequest {
     /// System prompt to use
     pub system: Option<String>,
 
-    /// Top-p sampling parameter
-    pub top_p: Option<f32>,
-
     /// Anthropic API version to use
     pub anthropic_version: Option<String>,
 
