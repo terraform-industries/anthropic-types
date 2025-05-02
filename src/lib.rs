@@ -3,16 +3,16 @@
 // This crate provides type definitions for interacting with the Anthropic API
 // and is intended to be used by Theater actors that need to communicate with Claude.
 
+pub mod errors;
 pub mod messages;
 pub mod models;
-pub mod tools;
-pub mod errors;
+pub mod tool_choice;
 
 // Re-export main types for convenience
+pub use errors::AnthropicError;
 pub use messages::{
-    AnthropicRequest, AnthropicResponse, CompletionRequest, CompletionResponse,
-    Message, MessageContent, OperationType, ResponseStatus, Usage,
+    AnthropicRequest, AnthropicResponse, CompletionRequest, CompletionResponse, Message,
+    MessageContent, OperationType, ResponseStatus, Usage,
 };
 pub use models::{ModelInfo, ModelPricing};
-pub use tools::{ToolDefinition, ToolChoice, ToolParameters};
-pub use errors::AnthropicError;
+pub use tool_choice::ToolChoice;

@@ -6,6 +6,7 @@ version = 4
 name = "anthropic-types"
 version = "0.1.32"
 dependencies = [
+ "mcp-protocol",
  "serde",
  "serde_json",
 ]
@@ -15,6 +16,16 @@ name = "itoa"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
+
+[[package]]
+name = "mcp-protocol"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "86b7d6844ef32ef738686968c799f4ab42d99ddfe6653be8e3a03dbbcaa905bc"
+dependencies = [
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "memchr"

@@ -1,5 +1,6 @@
 use crate::models::ModelInfo;
-use crate::tools::{ToolChoice, ToolDefinition};
+use crate::tool_choice::ToolChoice;
+use mcp_protocol::tool::Tool;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -67,7 +68,7 @@ pub struct CompletionRequest {
 
     /// Tools to make available to Claude
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tools: Option<Vec<ToolDefinition>>,
+    pub tools: Option<Vec<Tool>>,
 
     /// Tool choice configuration
     #[serde(skip_serializing_if = "Option::is_none")]
