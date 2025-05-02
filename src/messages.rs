@@ -65,10 +65,6 @@ pub struct CompletionRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub system: Option<String>,
 
-    /// Anthropic API version to use
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub anthropic_version: Option<String>,
-
     /// Tools to make available to Claude
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tools: Option<Vec<ToolDefinition>>,
@@ -80,10 +76,6 @@ pub struct CompletionRequest {
     /// Whether to disable parallel tool use
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_parallel_tool_use: Option<bool>,
-
-    /// Additional parameters for the API
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_params: Option<HashMap<String, serde_json::Value>>,
 }
 
 /// Information about token usage
