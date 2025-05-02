@@ -55,8 +55,7 @@ pub struct CompletionRequest {
     pub messages: Vec<Message>,
 
     /// Maximum number of tokens to generate
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_tokens: Option<u32>,
+    pub max_tokens: u32,
 
     /// Temperature parameter (0.0 to 1.0)
     #[serde(skip_serializing_if = "Option::is_none")]
