@@ -55,27 +55,35 @@ pub struct CompletionRequest {
     pub messages: Vec<Message>,
 
     /// Maximum number of tokens to generate
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_tokens: Option<u32>,
 
     /// Temperature parameter (0.0 to 1.0)
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub temperature: Option<f32>,
 
     /// System prompt to use
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub system: Option<String>,
 
     /// Anthropic API version to use
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub anthropic_version: Option<String>,
 
     /// Tools to make available to Claude
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tools: Option<Vec<ToolDefinition>>,
 
     /// Tool choice configuration
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_choice: Option<ToolChoice>,
 
     /// Whether to disable parallel tool use
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_parallel_tool_use: Option<bool>,
 
     /// Additional parameters for the API
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_params: Option<HashMap<String, serde_json::Value>>,
 }
 
