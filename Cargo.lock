@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "anthropic-types"
-version = "0.1.33"
+version = "0.1.34"
 dependencies = [
  "mcp-protocol",
  "serde",
@@ -19,9 +19,9 @@ checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
 
 [[package]]
 name = "mcp-protocol"
-version = "0.1.1"
+version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86b7d6844ef32ef738686968c799f4ab42d99ddfe6653be8e3a03dbbcaa905bc"
+checksum = "a8b4007de6cab753dbfb291e5cfcf3f0f5bfecda65268ba9d28deeaf8051880e"
 dependencies = [
  "serde",
  "serde_json",
