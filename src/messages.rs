@@ -21,6 +21,7 @@ pub enum MessageContent {
     ToolResult {
         tool_use_id: String,
         content: Vec<ToolContent>,
+        #[serde(skip_serializing_if = "Option::is_none")]
         is_error: Option<bool>,
     },
 }
