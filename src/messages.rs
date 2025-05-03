@@ -20,7 +20,7 @@ pub enum MessageContent {
     #[serde(rename = "tool_result")]
     ToolResult {
         tool_use_id: String,
-        content: ToolContent,
+        content: Vec<ToolContent>,
         is_error: Option<bool>,
     },
 }
