@@ -168,4 +168,7 @@ pub enum AnthropicResponse {
 
     /// Generated completion
     Completion { completion: CompletionResponse },
+
+    /// Error response
+    Error { error: String },
 }
