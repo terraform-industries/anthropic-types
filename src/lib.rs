@@ -12,7 +12,7 @@ pub mod tool_choice;
 pub use errors::AnthropicError;
 pub use messages::{
     AnthropicRequest, AnthropicResponse, CompletionRequest, CompletionResponse, Message,
-    MessageContent, OperationType, ResponseStatus, Usage,
+    MessageContent, ResponseStatus, Usage,
 };
 pub use models::{ModelInfo, ModelPricing};
 pub use tool_choice::ToolChoice;

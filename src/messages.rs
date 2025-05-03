@@ -2,7 +2,6 @@ use crate::models::ModelInfo;
 use crate::tool_choice::ToolChoice;
 use mcp_protocol::tool::Tool;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 /// Different types of content that can be in a message
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -82,10 +81,8 @@ pub struct CompletionRequest {
 /// Information about token usage
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Usage {
-    /// Number of input tokens
     pub input_tokens: u32,
 
-    /// Number of output tokens
     pub output_tokens: u32,
 
     pub cache_read_input_tokens: Option<u32>,
@@ -110,14 +107,14 @@ pub struct CompletionResponse {
 
     /// Reason why generation stopped
     /// can be "end_turn", "max_tokens", "stop_sequence", "tool_use", null
-    pub stop_reason: Option<StopReason>,
+    pub stop_reason: StopReason,
 
     /// Stop sequence if applicable (deprecated - kept for backward compatibility)
-    pub stop_sequence: Option<String>,
+    pub stop_sequence: String,
 
     /// Message type
     #[serde(rename = "type")]
-    pub message_type: Option<String>,
+    pub message_type: String,
 
     /// Token usage information
     pub usage: Usage,
@@ -143,35 +140,12 @@ pub enum StopReason {
     ToolUse,
 }
 
-/// Operation types that this actor can handle
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum OperationType {
-    /// Generate a completion from messages
-    #[serde(rename = "ChatCompletion")]
-    ChatCompletion,
-
-    /// List available models
-    #[serde(rename = "ListModels")]
-    ListModels,
-}
-
 /// Request format for the anthropic-proxy actor
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct AnthropicRequest {
-    /// Version of the request format (for future compatibility)
-    pub version: String,
+pub enum AnthropicRequest {
+    ListModels,
 
-    /// Type of operation to perform
-    pub operation_type: OperationType,
-
-    /// Request ID for tracking
-    pub request_id: String,
-
-    /// Chat completion request (if operation_type is ChatCompletion)
-    pub completion_request: Option<CompletionRequest>,
-
-    /// Additional parameters specific to the operation
-    pub params: Option<HashMap<String, serde_json::Value>>,
+    GenerateCompletion { request: CompletionRequest },
 }
 
 /// Response status
@@ -188,25 +162,10 @@ pub enum ResponseStatus {
 
 /// Response format from the anthropic-proxy actor
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct AnthropicResponse {
-    /// Version of the response format (for future compatibility)
-    pub version: String,
+pub enum AnthropicResponse {
+    /// List of available models
+    ListModels { models: Vec<ModelInfo> },
 
-    /// Request ID (matching the request)
-    pub request_id: String,
-
-    /// Status of the operation
-    pub status: ResponseStatus,
-
-    /// Error message if status is Error
-    pub error: Option<String>,
-
-    /// Generated completion data (if operation_type was ChatCompletion)
-    pub completion: Option<CompletionResponse>,
-
-    /// Tool execution result (if operation_type was ExecuteTool)
-    pub tool_result: Option<String>,
-
-    /// List of available models (if operation_type was ListModels)
-    pub models: Option<Vec<ModelInfo>>,
+    /// Generated completion
+    Completion { completion: CompletionResponse },
 }
