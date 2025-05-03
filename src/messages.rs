@@ -110,7 +110,7 @@ pub struct CompletionResponse {
     pub stop_reason: StopReason,
 
     /// Stop sequence if applicable (deprecated - kept for backward compatibility)
-    pub stop_sequence: String,
+    pub stop_sequence: Option<String>,
 
     /// Message type
     #[serde(rename = "type")]
