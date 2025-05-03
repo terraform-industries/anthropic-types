@@ -1,6 +1,6 @@
 use crate::models::ModelInfo;
 use crate::tool_choice::ToolChoice;
-use mcp_protocol::tool::Tool;
+use mcp_protocol::tool::{Tool, ToolContent};
 use serde::{Deserialize, Serialize};
 
 /// Different types of content that can be in a message
@@ -20,7 +20,7 @@ pub enum MessageContent {
     #[serde(rename = "tool_result")]
     ToolResult {
         tool_use_id: String,
-        content: serde_json::Value,
+        content: ToolContent,
         is_error: Option<bool>,
     },
 }
