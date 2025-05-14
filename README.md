@@ -10,15 +10,6 @@ This library provides a standardized set of types for working with the Anthropic
 - Parsing responses from the Anthropic API
 - Working with messages, models, and tools
 
-## Usage
-
-Add this library to your Cargo.toml:
-
-```toml
-[dependencies]
-anthropic-types = { path = "/Users/colinrozzi/work/anthropic-types" }
-```
-
 ### Basic Example
 
 ```rust
