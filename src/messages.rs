@@ -3,6 +3,33 @@ use crate::tool_choice::ToolChoice;
 use mcp_protocol::tool::{Tool, ToolContent};
 use serde::{Deserialize, Serialize};
 
+/// Cache control configuration for system messages
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct CacheControl {
+    #[serde(rename = "type")]
+    pub cache_type: String,
+}
+
+/// A single system message with optional cache control
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SystemMessage {
+    #[serde(rename = "type")]
+    pub message_type: String,
+    pub text: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_control: Option<CacheControl>,
+}
+
+/// Different types of system messages that can be provided
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(untagged)]
+pub enum SystemMessageFormat {
+    /// Simple string format
+    String(String),
+    /// Array of structured system messages
+    Array(Vec<SystemMessage>),
+}
+
 /// Different types of content that can be in a message
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(tag = "type")]
@@ -62,9 +89,9 @@ pub struct CompletionRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temperature: Option<f32>,
 
-    /// System prompt to use
+    /// System prompt to use (can be a string or array of structured messages)
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub system: Option<String>,
+    pub system: Option<SystemMessageFormat>,
 
     /// Tools to make available to Claude
     #[serde(skip_serializing_if = "Option::is_none")]
