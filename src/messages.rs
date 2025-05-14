@@ -31,7 +31,7 @@ pub enum SystemMessageFormat {
 }
 
 /// Different types of content that can be in a message
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(tag = "type")]
 pub enum MessageContent {
     #[serde(rename = "text")]
@@ -54,7 +54,7 @@ pub enum MessageContent {
 }
 
 /// A single message in a conversation with Claude
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Message {
     /// Role of the message sender (user, assistant, system)
     pub role: String,
@@ -208,4 +208,53 @@ pub enum AnthropicResponse {
 
     /// Error response
     Error { error: String },
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_deserialize_completion_request_with_system_messages() {
+        let json = r#"{
+            "model": "claude-3-7-sonnet-20250219",
+            "max_tokens": 1024,
+            "system": [
+              {
+                "type": "text",
+                "text": "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.\n"
+              },
+              {
+                "type": "text",
+                "text": "<the entire contents of Pride and Prejudice>",
+                "cache_control": {"type": "ephemeral"}
+              }
+            ],
+            "messages": [
+              {
+                "role": "user",
+                "content": "Analyze the major themes in Pride and Prejudice."
+              }
+            ]
+          }"#;
+
+        serde_json::from_str::<CompletionRequest>(json).expect("Failed to deserialize request");
+    }
+
+    #[test]
+    fn test_deserialize_completion_request_with_system_message_string() {
+        let json = r#"{
+            "model": "claude-3-7-sonnet-20250219",
+            "max_tokens": 1024,
+            "system": "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.",
+            "messages": [
+              {
+                "role": "user",
+                "content": "Analyze the major themes in Pride and Prejudice."
+              }
+            ]
+        }"#;
+
+        serde_json::from_str::<CompletionRequest>(json).expect("Failed to deserialize request");
+    }
 }
