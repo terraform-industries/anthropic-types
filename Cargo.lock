@@ -19,9 +19,8 @@ checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
 
 [[package]]
 name = "mcp-protocol"
-version = "0.1.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a8b4007de6cab753dbfb291e5cfcf3f0f5bfecda65268ba9d28deeaf8051880e"
+version = "0.2.2"
+source = "git+https://github.com/terraform-industries/rust-mcp?branch=ross%2Ftypes-equality#3fbcf23cd0aa200c0d2c350211ab861c82e58a9b"
 dependencies = [
  "serde",
  "serde_json",
