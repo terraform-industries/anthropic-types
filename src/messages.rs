@@ -59,8 +59,17 @@ pub struct Message {
     /// Role of the message sender (user, assistant, system)
     pub role: String,
 
-    /// Content of the message as vector of MessageContent objects
-    pub content: Vec<MessageContent>,
+    /// Content of the message - can be a string or vector of MessageContent objects
+    pub content: MessageContentFormat,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(untagged)]
+pub enum MessageContentFormat {
+    /// Simple string format
+    String(String),
+    /// Structured content format
+    Structured(Vec<MessageContent>),
 }
 
 impl Message {
@@ -68,7 +77,7 @@ impl Message {
     pub fn new_structured(role: impl Into<String>, content: Vec<MessageContent>) -> Self {
         Self {
             role: role.into(),
-            content,
+            content: MessageContentFormat::Structured(content),
         }
     }
 }
