@@ -5,16 +5,16 @@ use serde::{Deserialize, Serialize};
 pub struct ModelInfo {
     /// Model ID
     pub id: String,
-    
+
     /// Display name
     pub display_name: String,
-    
+
     /// Maximum context window size
     pub max_tokens: u32,
-    
+
     /// Provider name
     pub provider: String,
-    
+
     /// Optional pricing information
     pub pricing: Option<ModelPricing>,
 }
@@ -24,7 +24,7 @@ pub struct ModelInfo {
 pub struct ModelPricing {
     /// Cost per million input tokens
     pub input_cost_per_million_tokens: f64,
-    
+
     /// Cost per million output tokens
     pub output_cost_per_million_tokens: f64,
 }
@@ -37,7 +37,7 @@ impl ModelInfo {
             "claude-3-7-sonnet-20250219" => 200000,
 
             // Claude 3.5 models
-            "claude-3-5-sonnet-20241022" 
+            "claude-3-5-sonnet-20241022"
             | "claude-3-5-haiku-20241022"
             | "claude-3-5-sonnet-20240620" => 200000,
 
@@ -53,7 +53,7 @@ impl ModelInfo {
             _ => 100000, // Conservative default
         }
     }
-    
+
     /// Get pricing information for a given model ID
     pub fn get_pricing(model_id: &str) -> ModelPricing {
         match model_id {

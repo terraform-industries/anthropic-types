@@ -15,10 +15,10 @@ pub enum AnthropicError {
 
     /// Unexpected response format
     InvalidResponse(String),
-    
+
     /// Rate limit exceeded
     RateLimitExceeded { retry_after: Option<u64> },
-    
+
     /// Authentication error
     AuthenticationError(String),
 }
