@@ -209,3 +209,52 @@ pub enum AnthropicResponse {
     /// Error response
     Error { error: String },
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_deserialize_completion_request_with_system_messages() {
+        let json = r#"{
+            "model": "claude-3-7-sonnet-20250219",
+            "max_tokens": 1024,
+            "system": [
+              {
+                "type": "text",
+                "text": "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.\n"
+              },
+              {
+                "type": "text",
+                "text": "<the entire contents of Pride and Prejudice>",
+                "cache_control": {"type": "ephemeral"}
+              }
+            ],
+            "messages": [
+              {
+                "role": "user",
+                "content": "Analyze the major themes in Pride and Prejudice."
+              }
+            ]
+          }"#;
+
+        serde_json::from_str::<CompletionRequest>(json).expect("Failed to deserialize request");
+    }
+
+    #[test]
+    fn test_deserialize_completion_request_with_system_message_string() {
+        let json = r#"{
+            "model": "claude-3-7-sonnet-20250219",
+            "max_tokens": 1024,
+            "system": "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.",
+            "messages": [
+              {
+                "role": "user",
+                "content": "Analyze the major themes in Pride and Prejudice."
+              }
+            ]
+        }"#;
+
+        serde_json::from_str::<CompletionRequest>(json).expect("Failed to deserialize request");
+    }
+}
