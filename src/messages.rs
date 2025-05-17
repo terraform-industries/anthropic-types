@@ -51,6 +51,47 @@ pub enum MessageContent {
         #[serde(skip_serializing_if = "Option::is_none")]
         is_error: Option<bool>,
     },
+
+    #[serde(rename = "document")]
+    Document {
+        source: DocumentSource,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        title: Option<String>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        context: Option<String>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        citations: Option<DocumentCitations>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        cache_control: Option<CacheControl>,
+    },
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(tag = "type")]
+pub enum DocumentSource {
+    #[serde(rename = "text")]
+    Text { media_type: String, data: String },
+
+    #[serde(rename = "base64")]
+    Base64 { media_type: String, data: String },
+
+    #[serde(rename = "content")]
+    Custom { content: Vec<ChunkedText> },
+
+    #[serde(rename = "url")]
+    Url { url: String },
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ChunkedText {
+    #[serde(rename = "type")]
+    pub r#type: String,
+    pub text: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DocumentCitations {
+    pub enabled: bool,
 }
 
 /// A single message in a conversation with Claude
@@ -256,5 +297,90 @@ mod tests {
         }"#;
 
         serde_json::from_str::<CompletionRequest>(json).expect("Failed to deserialize request");
+    }
+
+    #[test]
+    fn test_deserialize_completion_request_with_document() {
+        let json = r#"{
+    "model": "claude-3-7-sonnet-20250219",
+    "max_tokens": 1024,
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "document",
+            "source": {
+              "type": "text",
+              "media_type": "text/plain",
+              "data": "The grass is green. The sky is blue."
+            },
+            "title": "My Document",
+            "context": "This is a trustworthy document.",
+            "citations": {"enabled": true}
+          },
+          {
+            "type": "text",
+            "text": "What color is the grass and sky?"
+          }
+        ]
+      }
+    ]
+  }"#;
+
+        serde_json::from_str::<CompletionRequest>(json).expect("Failed to deserialize request");
+    }
+
+    #[test]
+    fn test_deserialize_message_content_with_document_source_custom() {
+        let json = r#"{
+    "type": "document",
+    "source": {
+        "type": "content",
+        "content": [
+            {"type": "text", "text": "First chunk"},
+            {"type": "text", "text": "Second chunk"}
+        ]
+    },
+    "title": "Document Title",
+    "context": "Context about the document that will not be cited from",
+    "citations": {"enabled": true}
+}"#;
+
+        serde_json::from_str::<MessageContent>(json).expect("Failed to deserialize request");
+    }
+
+    #[test]
+    fn test_deserialize_message_content_with_document_source_text() {
+        let json = r#"{
+    "type": "document",
+    "source": {
+        "type": "text",
+        "media_type": "text/plain",
+        "data": "Plain text content..."
+    },
+    "title": "Document Title",
+    "context": "Context about the document that will not be cited from",
+    "citations": {"enabled": true}
+}"#;
+
+        serde_json::from_str::<MessageContent>(json).expect("Failed to deserialize request");
+    }
+
+    #[test]
+    fn test_deserialize_message_content_with_document_source_base64() {
+        let json = r#"{
+    "type": "document",
+    "source": {
+        "type": "base64",
+        "media_type": "application/pdf",
+        "data": "base64-encoded-pdf-content"
+    },
+    "title": "Document Title",
+    "context": "Context about the document that will not be cited from",
+    "citations": {"enabled": true}
+}"#;
+
+        serde_json::from_str::<MessageContent>(json).expect("Failed to deserialize request");
     }
 }
